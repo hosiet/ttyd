@@ -1,6 +1,6 @@
 (function() {
     var terminalContainer = document.getElementById('terminal-container'),
-        httpsEnabled = window.location.protocol == "https:",
+        httpsEnabled = window.location.protocol === "https:",
         url = (httpsEnabled ? 'wss://' : 'ws://') + window.location.host + window.location.pathname + 'ws',
         authToken = (typeof tty_auth_token !== 'undefined') ? tty_auth_token : null,
         protocols = ["tty"],
@@ -43,19 +43,22 @@
             });
 
             term.on('open', function() {
-                window.addEventListener('resize', function(event) {
-                    term.fit();
+                // https://stackoverflow.com/a/27923937/1727928
+                window.addEventListener('resize', function() {
+                    clearTimeout(window.resizedFinished);
+                    window.resizedFinished = setTimeout(function () {
+                        term.fit();
+                    }, 250);
                 });
                 window.addEventListener('beforeunload', unloadCallback);
                 term.fit();
-                term.focus();
             });
 
             while (terminalContainer.firstChild) {
                 terminalContainer.removeChild(terminalContainer.firstChild);
             }
 
-            term.open(terminalContainer);
+            term.open(terminalContainer, true);
         };
 
         ws.onmessage = function(event) {
@@ -94,7 +97,8 @@
             }
             window.removeEventListener('beforeunload', unloadCallback);
             clearInterval(pingTimer);
-            if (autoReconnect > 0) {
+            // 1000: CLOSE_NORMAL
+            if (event.code !== 1000 && autoReconnect > 0) {
                 setTimeout(openWs, autoReconnect * 1000);
             }
         };
