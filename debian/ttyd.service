@@ -1,0 +1,17 @@
+#  This file is default for Debian packaging. See also
+#  /etc/default/ttyd for environment variables.
+
+[Unit]
+Description=ttyd - Share your terminal over the web
+After=network.target
+
+[Service]
+Type=simple
+PermissionsStartOnly=true
+Environment=/etc/default/ttyd
+ExecStart=/usr/bin/ttyd -i ${INTERFACE} -p ${PORT} -u ${UID} -g ${GID} ${EXTRA_ARGS} ${COMMAND}
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
