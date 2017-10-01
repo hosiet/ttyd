@@ -8,7 +8,7 @@ After=network.target
 [Service]
 Type=simple
 PermissionsStartOnly=true
-Environment=/etc/default/ttyd
+EnvironmentFile=/etc/default/ttyd
 ExecStart=/usr/bin/ttyd -i ${INTERFACE} -p ${PORT} -u ${UID} -g ${GID} ${EXTRA_ARGS} ${COMMAND}
 Restart=always
 RestartSec=5
