@@ -1,0 +1,24 @@
+# Defaults for ttyd initscript
+# installed at /etc/default/ttyd by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+#Extra arguements
+EXTRA_ARGS="-d 7"
+
+#Default command
+COMMAND="bash"
+
+#Network interface to bind or UNIX domain socket path
+INTERFACE="lo"
+
+#Port to listen (use `0` for random port)
+PORT=7681
+
+#User id to run with
+UID=0
+
+#Group id to run with
+GID=0
